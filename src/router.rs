@@ -1,11 +1,9 @@
-use actix_web::{get, post, HttpResponse, Responder};
+
+use actix_web::{get, HttpResponse};
 
 #[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
+async fn index() -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/html; chatset=utf-8")
+        .body(include_str!("../static/index.html"))
 }

@@ -17,8 +17,7 @@ impl Server {
         println!("Start listening {}", self.ip);
         HttpServer::new(|| {
             App::new()
-                .service(router::hello)
-                .service(router::echo)
+                .service(router::index)
         })
         .bind(&self.ip)?
         .run()

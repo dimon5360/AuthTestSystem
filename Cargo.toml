@@ -8,4 +8,7 @@ edition = "2021"
 [dependencies]
 chrono = "*"
 dotenv = "*"
-actix-web = "4"
+actix = "*"
+actix-web = "*"
+serde = "*"
+serde_json = "*"
