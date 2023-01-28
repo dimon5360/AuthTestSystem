@@ -1,8 +1,9 @@
 use actix_web::{App, HttpServer};
-use tera::{Tera};
+use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+use tera::Tera;
 
-use crate::router;
 use crate::handler;
+use crate::router;
 
 #[derive()]
 pub struct Server {
@@ -16,8 +17,13 @@ impl Server {
 
     pub async fn run(&self) -> std::io::Result<()> {
         println!("Start listening {}", self.ip);
-        HttpServer::new(|| {
+        let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+        builder
+            .set_private_key_file("key.pem", SslFiletype::PEM)
+            .unwrap();
+        builder.set_certificate_chain_file("cert.pem").unwrap();
 
+        HttpServer::new(|| {
             let tera = match Tera::new("static/**/*") {
                 Ok(t) => t,
                 Err(e) => {
@@ -27,7 +33,7 @@ impl Server {
             };
 
             App::new()
-                .app_data(router::AppData {tmpl: tera})
+                .app_data(router::AppData { tmpl: tera })
                 .service(router::index)
                 .service(router::auth)
                 .service(router::ping)
@@ -36,7 +42,7 @@ impl Server {
                 .service(handler::login)
                 .service(handler::logout)
         })
-        .bind(&self.ip)
+        .bind_openssl(&self.ip, builder)
         .expect(format!("Cannot bind to {}", &self.ip).as_str())
         .workers(1)
         .run()

@@ -9,7 +9,6 @@ pub async fn auth() -> HttpResponse {
 
 #[post("/api/v1/auth/login")]
 pub async fn login(body: String) -> HttpResponse {
-
     println!("{}", format!("Got thing: {:?}", body));
 
     HttpResponse::Ok().json("hello")

@@ -1,5 +1,5 @@
-use actix_web::{get, web, HttpResponse, HttpRequest};
-use tera::{Tera, Context};
+use actix_web::{get, web, HttpRequest, HttpResponse};
+use tera::{Context, Tera};
 
 #[get("/")]
 pub async fn index() -> HttpResponse {
@@ -9,8 +9,8 @@ pub async fn index() -> HttpResponse {
 }
 
 pub struct AppData {
-    pub tmpl: Tera
-}        
+    pub tmpl: Tera,
+}
 
 #[get("/main/{username}")]
 pub async fn main(username: web::Path<String>, req: HttpRequest) -> HttpResponse {
