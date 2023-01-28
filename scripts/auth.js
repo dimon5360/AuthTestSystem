@@ -1,5 +1,5 @@
 
-function login() {
+function auth() {
 
     const xhr = new XMLHttpRequest();
 
@@ -8,13 +8,10 @@ function login() {
         password: document.getElementById('Password').value,
     };
 
-    xhr.addEventListener('load', (event) => {
-        alert('Yeah! Data sent and response loaded.');
-      });
-
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-            console.log("got response")
+            console.log("got response");
+            window.location.href=`/main/${json.login}`;
             return this.responseText;
         }
     });

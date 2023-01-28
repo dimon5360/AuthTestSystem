@@ -8,11 +8,9 @@ edition = "2021"
 [dependencies]
 chrono = "*"
 dotenv = "*"
-
 actix = "*"
 actix-web = "*"
-
+tera = "*"
 serde = "*"
 serde_json = "*"
-
 futures = "*"

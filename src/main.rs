@@ -1,8 +1,8 @@
-
 mod router;
+mod handler;
 mod server;
 
-const BUILD: u8 = 3;
+const BUILD: u8 = 4;
 const MINOR: u8 = 0;
 const MAJOR: u8 = 0;
 
