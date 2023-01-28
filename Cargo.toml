@@ -1,5 +1,5 @@
 [package]
-name = "CoreService"
+name = "auth_service"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,6 +9,10 @@ edition = "2021"
 chrono = "*"
 dotenv = "*"
 actix = "*"
-actix-web = "*"
+actix-web = { version = "*", features = ["openssl"] }
+openssl = "*"
+openssl-sys = "*"
+tera = "*"
 serde = "*"
 serde_json = "*"
+futures = "*"

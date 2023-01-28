@@ -2,7 +2,12 @@
 <head>
     <title>Index page</title>
     <p>Hello, User</p>
+    <title>Auth</title>
+    <script> 
+        function auth() {
+            window.location.href="/api/v1/auth";
+        }
+    </script>
 </head>
-<body>
-    
+<button type="button" onclick="auth()">Log In</button>
 </body>
