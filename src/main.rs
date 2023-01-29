@@ -1,6 +1,7 @@
 mod handler;
 mod router;
 mod server;
+mod storage;
 
 const BUILD: u8 = 5;
 const MINOR: u8 = 0;
