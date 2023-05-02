@@ -2,6 +2,7 @@ mod handler;
 mod router;
 mod server;
 mod storage;
+mod models;
 
 const BUILD: u8 = 5;
 const MINOR: u8 = 0;
@@ -10,7 +11,7 @@ const MAJOR: u8 = 0;
 #[actix_web::main]
 async fn main() {
     println!(
-        "Core service version v.{}.{}.{} from {}",
+        "Auth service version v.{}.{}.{} from {}",
         MAJOR,
         MINOR,
         BUILD,

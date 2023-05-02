@@ -41,24 +41,32 @@ impl Server {
         let pg = storage::PostgresHandler::new();
 
         HttpServer::new(move || {
-            let tera = match Tera::new("static/**/*") {
+            let tera = match Tera::new("api/v1/html/**/*") {
                 Ok(t) => t,
                 Err(e) => {
                     println!("Parsing error(s): {}", e);
                     ::std::process::exit(1);
                 }
             };
-            
+
             App::new()
-                .app_data(router::AppData { tmpl: tera })
+                .app_data(handler::AppData { tmpl: tera })
                 .app_data(ServerData { db: pg.clone() })
-                .service(router::index)
-                .service(router::auth)
-                .service(router::ping)
-                .service(router::main)
-                .service(handler::auth)
-                .service(handler::login)
-                .service(handler::logout)
+
+                .service(router::get_index)
+                .service(router::get_ping)
+                .service(router::get_auth)
+                .service(router::get_login)
+
+                .service(handler::get_index)
+                .service(handler::get_main)
+
+                .service(handler::get_auth)
+                .service(handler::get_login)
+                .service(handler::get_logout)
+                .service(handler::post_auth)
+                .service(handler::post_login)
+                .service(handler::post_logout)
                 .service(read_from_db)
         })
         .bind_openssl(&self.ip, builder)
