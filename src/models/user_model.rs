@@ -1,11 +1,15 @@
 
+use serde::Deserialize;
 
-struct _Model {
-    username: String,
-    password: String
+#[derive(Deserialize, Debug)]
+pub struct UserInfo {
+    pub username: String,
+    pub password: String
 }
 
-
-pub fn hello() {
-    println!("hello user model");
+#[derive(Deserialize, Debug)]
+pub struct DetailUserInfo {
+    pub username: String,
+    pub password: String,
+    pub email: String
 }

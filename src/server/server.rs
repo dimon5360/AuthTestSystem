@@ -1,28 +1,16 @@
-use actix_web::{App, get, HttpServer, HttpRequest, HttpResponse};
+use actix_web::{App, HttpServer};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 use tera::Tera;
 
-use crate::handler;
-use crate::router;
-use crate::storage;
+use crate::api::handler;
+use crate::api::handler::AppData;
+use crate::api::router;
+use crate::storage::storage;
 
 #[derive()]
 pub struct Server {
     ip: String,
 }
-
-struct ServerData {
-    db: actix::Addr<storage::PostgresHandler>
-}
-
-#[get("/read")]
-async fn read_from_db(req: HttpRequest) -> HttpResponse {
-    let data = req.app_data::<ServerData>().unwrap();
-    data.db.do_send(storage::AddUser {
-        user_name: "".to_string(),
-      });
-    HttpResponse::Ok().body("pong")
-  }
 
 impl Server {
     pub fn new(ip: &str) -> Server {
@@ -50,8 +38,7 @@ impl Server {
             };
 
             App::new()
-                .app_data(handler::AppData { tmpl: tera })
-                .app_data(ServerData { db: pg.clone() })
+                .app_data(AppData { tmpl: tera, db: pg.clone() })
 
                 .service(router::get_index)
                 .service(router::get_ping)
@@ -67,7 +54,6 @@ impl Server {
                 .service(handler::post_auth)
                 .service(handler::post_login)
                 .service(handler::post_logout)
-                .service(read_from_db)
         })
         .bind_openssl(&self.ip, builder)
         .expect(format!("Cannot bind to {}", &self.ip).as_str())

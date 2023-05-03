@@ -1,29 +1,31 @@
-mod handler;
-mod router;
+mod api;
 mod server;
 mod storage;
 mod models;
+mod utils;
 
-const BUILD: u8 = 5;
-const MINOR: u8 = 0;
-const MAJOR: u8 = 0;
+use server::server::Server;
+
+fn parse_env(key: &str) -> Result<String, ()> {
+    match std::env::var(key) {
+        Ok(v) => return Ok(v),
+        Err(e) => panic!("${} is not set ({})", key, e),
+    }
+}
 
 #[actix_web::main]
 async fn main() {
-    println!(
-        "Auth service version v.{}.{}.{} from {}",
-        MAJOR,
-        MINOR,
-        BUILD,
-        chrono::Local::now()
-    );
     let path = std::env::current_dir().unwrap();
 
-    dotenv::from_path(format!("{}/{}", path.display().to_string(), "config/.env")).unwrap();
-    let host = "SERVICE_HOST";
+    dotenv::from_path(format!("{}/{}", path.display().to_string(), "config/app.env")).unwrap();
 
-    match std::env::var(host) {
-        Ok(ip) => server::Server::new(ip.as_str()).run().await.unwrap(),
-        Err(e) => panic!("${} is not set ({})", host, e),
-    }
+    let version = parse_env("VERSION").unwrap();
+    let host_ip = parse_env("SERVICE_HOST").unwrap();
+
+    println!("Auth service version v.{} from {}",
+        version,
+        chrono::Local::now()
+    );
+
+    Server::new(host_ip.as_str()).run().await.unwrap()
 }
